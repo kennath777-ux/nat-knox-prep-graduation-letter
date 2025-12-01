@@ -97,7 +97,8 @@
     <div class="letter" id="letterText">
 亲爱的Nathan，
 祝你12岁生日快乐，也祝贺你顺利从小学毕业！
-下面这些话，是我们很喜欢的，也希望它能陪你走好接下来的路。
+以下是我们非常喜欢的几段话，
+希望这些文字能在你成长的路上给你温暖和力量，
 愿你永远年轻，永远心里有光！
 爱你的，
 爸爸妈妈
@@ -164,32 +165,38 @@ May you be young forever!
       P.S. Nat，你站在帆船上迎着海风的样子，和你笑起来的样子，都是我们见过最美的光。🌊⛵️
     </div>
 
-    <div class="controls">
-      <button id="readBtn">朗读信件</button>
-      <button id="stopBtn">停止朗读</button>
+    <div class="audio-player">
+      <audio id="audioPlayer" controls>
+        <source src="Nat.m4a" type="audio/mp4">
+        您的浏览器不支持音频播放。
+      </audio>
     </div>
   </div>
 
   <script>
-    const text = document.getElementById('letterText').innerText;
-    let isSpeaking = false;
-
-    document.getElementById('readBtn').addEventListener('click', () => {
-      if (isSpeaking) return;
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'zh-CN'; // 优先中文朗读，浏览器会自动处理中英文混合
-      utterance.rate = 0.9;     // 语速稍慢，更温情
-      utterance.pitch = 1.0;
-
-      utterance.onstart = () => { isSpeaking = true; };
-      utterance.onend = () => { isSpeaking = false; };
-
-      speechSynthesis.speak(utterance);
-    });
-
-    document.getElementById('stopBtn').addEventListener('click', () => {
-      speechSynthesis.cancel();
-      isSpeaking = false;
+    // 可选：添加一些简单的交互体验
+    document.addEventListener('DOMContentLoaded', function() {
+      const audioPlayer = document.getElementById('audioPlayer');
+      
+      // 音频加载失败时的提示
+      audioPlayer.addEventListener('error', function() {
+        alert('音频文件加载失败。请确认 Nat.m4a 文件已在同一目录下。');
+      });
+      
+      // 音频播放时，滚动到音频控制位置
+      audioPlayer.addEventListener('play', function() {
+        const audioContainer = this.parentElement;
+        audioContainer.style.animation = 'pulse 1s infinite';
+      });
+      
+      // 音频暂停时，移除动画
+      audioPlayer.addEventListener('pause', function() {
+        const audioContainer = this.parentElement;
+        audioContainer.style.animation = '';
+      });
+      
+      // 添加自定义滚动行为
+      document.querySelector('.audio-player').scrollIntoView({behavior: 'smooth', block: 'nearest'});
     });
   </script>
 </body>
